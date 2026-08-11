@@ -1,3 +1,1 @@
-# gamesolutions
-
-## TODO
+# Only website hosting
