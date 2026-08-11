@@ -87,6 +87,39 @@ body.game-active .collect-icon{background:var(--gold)}
   100%{transform:scale(1)}
 }
 
+/* ---------- Tasten-Hinweis ---------- */
+.key-hint{
+  position:absolute;top:8px;right:28px;z-index:3;
+  display:none;align-items:center;gap:14px;
+  padding:12px 16px;border-radius:14px;
+  background:rgba(36,26,61,.72);border:1px solid var(--line-2);
+  backdrop-filter:blur(8px);
+  opacity:0;transform:translateY(-6px);
+  transition:opacity .3s ease,transform .3s ease;
+  pointer-events:none;
+}
+/* ab hier greift dieselbe Mobile-Grenze wie in styles.css/game.js (isMobileLayout), Hinweis erscheint nur im Breitformat */
+@media (max-width:860px){
+  .key-hint{display:none!important}
+}
+body.game-active .key-hint{display:flex;opacity:1;transform:translateY(0)}
+.key-hint-pad{
+  display:grid;grid-template-columns:repeat(3,20px);grid-template-rows:repeat(2,20px);gap:3px;
+}
+.key-cap{
+  display:flex;align-items:center;justify-content:center;
+  width:20px;height:20px;border-radius:5px;
+  background:var(--ink-2);border:1px solid var(--line-2);color:var(--cyan);
+  font-size:9px;
+}
+.key-up{grid-column:2;grid-row:1}
+.key-left{grid-column:1;grid-row:2}
+.key-down{grid-column:2;grid-row:2}
+.key-right{grid-column:3;grid-row:2}
+.key-hint-text{
+  font-family:"Space Mono",monospace;font-size:12px;color:var(--muted);white-space:nowrap;
+}
+
 /* ---------- Game Sprite ---------- */
 .game-trail{position:fixed;inset:0;pointer-events:none;z-index:9998;display:none}
 body.game-active .game-trail{display:block}

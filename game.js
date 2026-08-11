@@ -328,15 +328,9 @@ var GAME_ENABLED = true;
     // Kachel-Highlight: gröbere Grenze, damit ein innerer Link (z.B. in aufgeklappten Panels) das Highlight nicht unterbricht
     var tile = hit && hit.closest('.pillar, .ref, .player, .btn, .contact');
     if(tile !== hoveredTile){
-      if(hoveredTile){
-        if(window.setTileHover) window.setTileHover(hoveredTile, false);
-        if(window.collapseCard) window.collapseCard(hoveredTile);
-      }
+      if(hoveredTile && window.setTileHover) window.setTileHover(hoveredTile, false);
       hoveredTile = tile || null;
-      if(hoveredTile){
-        if(window.setTileHover) window.setTileHover(hoveredTile, true);
-        if(window.expandCard) window.expandCard(hoveredTile);
-      }
+      if(hoveredTile && window.setTileHover) window.setTileHover(hoveredTile, true);
     }
   }
 
@@ -394,6 +388,17 @@ var GAME_ENABLED = true;
     }
   }
 
+  // Score-Text inkl. optionaler verstrichener Zeit ("x / y (N.NNs)") — gemeinsam genutzt vom 100%- und Any%-Timer
+  function formatScoreLabel(withTime){
+    var track = window.GameTrack;
+    if(!track) return '';
+    var label = track.collected + ' / ' + track.total;
+    if(withTime && startTime !== null){
+      label += ' (' + ((performance.now() - startTime) / 1000).toFixed(2) + 's)';
+    }
+    return label;
+  }
+
   function render(){
     var screenX = pos.x - window.scrollX;
     var screenY = pos.y - window.scrollY;
@@ -416,11 +421,7 @@ var GAME_ENABLED = true;
         var finished = track.collected === track.total;
         var countEl = document.getElementById('collectCount');
         if(countEl){
-          var label = track.collected + ' / ' + track.total;
-          if(finished && startTime !== null){
-            label += ' (' + Math.round((performance.now() - startTime) / 1000) + 's)';
-          }
-          countEl.textContent = label;
+          countEl.textContent = formatScoreLabel(finished);
           countEl.classList.remove('count-pop');
           void countEl.offsetWidth; // Reflow erzwingen, damit die Animation bei schnell aufeinanderfolgenden Treffern jedes Mal neu startet
           countEl.classList.add('count-pop');
@@ -522,7 +523,6 @@ var GAME_ENABLED = true;
     if(focusedEl){ focusedEl.blur(); focusedEl = null; }
     if(hoveredTile){
       if(window.setTileHover) window.setTileHover(hoveredTile, false);
-      if(window.collapseCard) window.collapseCard(hoveredTile);
       hoveredTile = null;
     }
     particles = [];
@@ -597,6 +597,10 @@ var GAME_ENABLED = true;
   if(contactLink){
     contactLink.addEventListener('click', function(){
       if(!active) return;
+      if(!gameFinished){
+        var countEl = document.getElementById('collectCount'); // Any%-Zeit: nur setzen, wenn nicht schon die 100%-Zeit steht
+        if(countEl) countEl.textContent = formatScoreLabel(true);
+      }
       triggerWin();
       stop();
       document.body.classList.add('game-finished'); // hält das Score-Badge sichtbar, obwohl game-active entfernt wurde

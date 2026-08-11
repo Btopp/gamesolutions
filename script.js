@@ -33,18 +33,10 @@
   }
   // Von game.js aufgerufen, wenn der Charakter über eine Kachel fährt/sie verlässt — bleibt bewusst generisch/lose gekoppelt.
   // .char-hover löst dieselbe optische Hervorhebung wie :hover aus (siehe styles.css), da der Charakter kein echtes :hover triggert.
-  // Getrennt von expandCard/collapseCard, da .pillar kein Akkordeon-Panel hat, aber trotzdem highlighten soll.
+  // Reines Highlight, kein Ausklappen — das passiert nur noch bewusst über Klick/Leertaste (siehe keydown-Listener unten).
   window.setTileHover = function(el, hovered){
     if(!el || !el.matches('.pillar, .ref, .player, .btn, .contact')) return;
     el.classList.toggle('char-hover', hovered);
-  };
-  window.expandCard = function(card){
-    if(!card || !card.matches('.player, .ref')) return;
-    if(card.getAttribute('aria-expanded') !== 'true') setCard(card, true);
-  };
-  window.collapseCard = function(card){
-    if(!card || !card.matches('.player, .ref')) return;
-    if(card.getAttribute('aria-expanded') === 'true') setCard(card, false);
   };
   document.querySelectorAll('.player, .ref').forEach(function(card){
     card.addEventListener('click', function(e){
@@ -61,12 +53,10 @@
     card.addEventListener('mouseenter', function(){
       if(!document.body.classList.contains('game-active')) return;
       window.setTileHover(card, true);
-      window.expandCard(card);
     });
     card.addEventListener('mouseleave', function(){
       if(!document.body.classList.contains('game-active')) return;
       window.setTileHover(card, false);
-      window.collapseCard(card);
     });
   });
 })();
