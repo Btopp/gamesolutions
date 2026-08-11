@@ -39,7 +39,7 @@ var GAME_ENABLED = true;
   // Jeder Wert ist eine Position entlang der GESAMTEN fertigen Strecke, als Anteil ihrer Bogenlänge
   // (0 = Start, 1 = Ziel) — liegt dadurch immer exakt auf der Strecken-Mittellinie, unabhängig von der
   // konkreten Kurvenform. Reihenfolge der Werte ist egal, Anzahl beliebig.
-  var COLLECTIBLE_POINTS = [0.06, 0.14, 0.22, 0.285, 0.435, 0.46, 0.63, 0.68, 0.845, 0.985];
+  var COLLECTIBLE_POINTS = [0.06, 0.15, 0.22, 0.285, 0.435, 0.46, 0.63, 0.68, 0.845, 0.985];
   // Alternative Sammelobjekt-Positionen fürs Mobile-Layout, ebenfalls erster Entwurf.
   var COLLECTIBLE_POINTS_MOBILE = [0.03, 0.08, 0.14, 0.17, 0.36, 0.38, 0.66, 0.69, 0.89, 0.99];
   var ACCENTS = ['--pink', '--cyan', '--gold'];
