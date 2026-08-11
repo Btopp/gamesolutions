@@ -135,7 +135,8 @@ body.game-active .spot{opacity:0} /* während des Spiels übernimmt der Glow am 
 .btn-icon{font-size:15px;line-height:1}
 
 /* ---------- Section base ---------- */
-section.block{padding:110px 0;scroll-margin-top:80px}
+section.block{padding:144px 0;scroll-margin-top:80px}
+#kontakt{padding-bottom:320px} /* extra Platz, damit der letzte Streckenabschnitt unterhalb der .contact-Kachel enden kann */
 .section-head{max-width:680px;margin-bottom:56px}
 .section-head h2{
   font-family:"Unbounded",sans-serif;font-weight:600;
@@ -281,7 +282,7 @@ section.block{padding:110px 0;scroll-margin-top:80px}
   padding:64px 48px;text-align:center;cursor:pointer;
   transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
 }
-.contact:hover,.contact:focus-within{transform:translateY(-4px);border-color:var(--pink);box-shadow:0 16px 32px -22px var(--pink)}
+.contact:hover,.contact:focus-within,.contact.char-hover{transform:translateY(-4px);border-color:var(--pink);box-shadow:0 16px 32px -22px var(--pink)}
 .contact h2{font-family:"Unbounded",sans-serif;font-weight:600;font-size:clamp(1.8rem,3.6vw,2.6rem);line-height:1.1;letter-spacing:-.02em;max-width:620px;margin:0 auto 16px}
 .contact p{color:var(--muted);max-width:480px;margin:0 auto 34px}
 
@@ -299,6 +300,10 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-s
   .pillars,.team,.refs{grid-template-columns:1fr}
   .hero-inner{padding:90px 0}
   .contact{padding:48px 26px}
+}
+@media (max-width:420px){
+  .brand-name{display:none} /* nur noch das Icon, damit der Punktestand beim Spielen genug Platz hat */
+  .brand .coin{margin-right:0}
 }
 @media (prefers-reduced-motion:reduce){
   *{scroll-behavior:auto!important}

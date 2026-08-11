@@ -21,15 +21,30 @@ var GAME_ENABLED = true;
   var edgeA = svg && svg.querySelector('.track-edge-a');
   var edgeB = svg && svg.querySelector('.track-edge-b');
   var collectiblesGroup = svg && svg.querySelector('.track-collectibles');
+  var startGroup = svg && svg.querySelector('.track-start');
+  var finishGroup = svg && svg.querySelector('.track-finish');
   var countEl = document.getElementById('collectCount');
   if(!svg || !path) return;
 
   var SECTION_IDS = ['#start', '#machen', '#referenzen', '#team', '#kontakt'];
+  // x/y sind Anteile (0-1) der .wrap-Content-Box der jeweiligen Section — handgesetzt statt formelhaft,
+  // damit die Strecke die volle Breite nutzt und echte Kurven/horizontale Passagen statt nur mittiges Schlängeln entstehen.
+  var TRACK_WAYPOINTS = {
+    '#start':      [{x:.50,y:.14},{x:.78,y:.55},{x:.48,y:.88}],
+    '#machen':     [{x:.58,y:.10},{x:.82,y:-.04},{x:.96,y:.1},{x:.80,y:.46},{x:.22,y:.58},{x:.16,y:.88}],
+    '#referenzen': [{x:.18,y:.10},{x:.42,y:.34},{x:.78,y:.54}],
+    '#team':       [{x:.68,y:.10},{x:.20,y:.38},{x:.28,y:.66},{x:.60,y:.88}],
+    '#kontakt':    [{x:.60,y:.08},{x:.26,y:.24},{x:.45,y:.86}]
+  };
+  // Jeder Wert ist eine Position entlang der GESAMTEN fertigen Strecke, als Anteil ihrer Bogenlänge
+  // (0 = Start, 1 = Ziel) — liegt dadurch immer exakt auf der Strecken-Mittellinie, unabhängig von der
+  // konkreten Kurvenform. Reihenfolge der Werte ist egal, Anzahl beliebig.
+  var COLLECTIBLE_POINTS = [0.06, 0.14, 0.22, 0.285, 0.435, 0.46, 0.63, 0.68, 0.845, 0.985];
+  // Alternative Sammelobjekt-Positionen fürs Mobile-Layout, ebenfalls erster Entwurf.
+  var COLLECTIBLE_POINTS_MOBILE = [0.03, 0.08, 0.14, 0.17, 0.36, 0.38, 0.66, 0.69, 0.89, 0.99];
   var ACCENTS = ['--pink', '--cyan', '--gold'];
   var rootStyle = getComputedStyle(document.documentElement);
-  var POINTS_PER_SECTION = 4;
   var LANE_HALF = 42; // Abstand jeder Begrenzungslinie von der Mittelachse (volle Breite bei aufgeklappter Strecke)
-  var COLLECTIBLES_PER_SECTION = 2;
   var foldWidth = 0; // aktueller Begrenzungs-Abstand; 0 = eingeklappt (nur Mittellinie), animiert via unfold()/fold()
   var foldRaf = null;
 
@@ -41,6 +56,10 @@ var GAME_ENABLED = true;
 
   function accentColor(i){
     return rootStyle.getPropertyValue(ACCENTS[i % ACCENTS.length]).trim();
+  }
+
+  function isMobileLayout(){
+    return window.innerWidth <= 860; // synchron mit styles.css @media(max-width:860px), wo Kacheln auf 1 Spalte umschalten
   }
 
   // Glatte, durchgängig stetige Kurve durch eine Punktfolge (Catmull-Rom -> kubische Bezier)
@@ -65,31 +84,20 @@ var GAME_ENABLED = true;
     if(sections.length < 2) return;
 
     var docWidth = window.innerWidth;
-    var center = docWidth / 2;
-    var amp = Math.min(90, docWidth * 0.18); // Schlängel-Amplitude, auf schmale Viewports geklemmt
 
-    // Pro Abschnitt mehrere Punkte über dessen Höhe verteilt, X folgt einer Sinuswelle, plus gelegentlicher
-    // kurzer horizontaler Schlenker: erzeugt eine verspieltere Schlängelung mit mehr "Streckenlänge" genau
-    // an jedem Themenbereich statt eines rein monotonen Auf-und-Ab.
+    // Pro Section die handgesetzten Wegpunkte (TRACK_WAYPOINTS) aus Anteilen der .wrap-Content-Box in
+    // Pixelkoordinaten umrechnen — bleibt dadurch responsiv, ohne die Streckenform fest zu verdrahten.
     var points = [];
     sections.forEach(function(section, i){
-      var r = section.getBoundingClientRect();
-      var top = r.top + window.scrollY;
-      var usableHeight = Math.max(r.height - 120, 40);
-      var side = i % 2 === 0 ? -1 : 1;
-      var sectionAmp = amp * (0.75 + (i % 3) * 0.15); // Schwungstärke variiert leicht pro Abschnitt
-      var sectionPoints = [];
-      for(var k = 0; k < POINTS_PER_SECTION; k++){
-        var f = k / (POINTS_PER_SECTION - 1);
-        var y = top + 60 + f * usableHeight;
-        var wiggle = Math.sin(f * Math.PI * 1.4) * sectionAmp;
-        sectionPoints.push({x: center + side * wiggle, y: y});
-      }
-      if(i % 2 === 1){
-        var base = sectionPoints[1];
-        sectionPoints.splice(2, 0, {x: base.x - side * sectionAmp * 1.3, y: base.y + 22});
-      }
-      points = points.concat(sectionPoints);
+      var wrap = section.querySelector('.wrap') || section;
+      var wr = wrap.getBoundingClientRect();
+      var left = wr.left + window.scrollX, width = wr.width;
+      var sr = section.getBoundingClientRect();
+      var top = sr.top + window.scrollY, height = sr.height;
+      var waypoints = TRACK_WAYPOINTS[SECTION_IDS[i]] || [{x: .5, y: .5}];
+      waypoints.forEach(function(wp){
+        points.push({x: left + wp.x * width, y: top + wp.y * height});
+      });
     });
 
     path.setAttribute('d', smoothPathD(points));
@@ -100,8 +108,48 @@ var GAME_ENABLED = true;
     svg.setAttribute('viewBox', '0 0 ' + docWidth + ' ' + docHeight);
 
     buildEdges(foldWidth);
+    buildMarkers();
 
-    buildCollectibles(sections.length);
+    buildCollectibles();
+  }
+
+  // Start-Fähnchen am ersten Wegpunkt, Ziel-Schachbrettlinie quer zur Strecke am letzten Wegpunkt (Kontakt-Kachel)
+  function buildMarkers(){
+    var totalLength = path.getTotalLength();
+
+    if(startGroup){
+      startGroup.innerHTML = '';
+      var startPt = path.getPointAtLength(0);
+      var startEl = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      startEl.setAttribute('class', 'start-flag');
+      startEl.setAttribute('transform', 'translate(' + startPt.x + ',' + startPt.y + ')');
+      var pole = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      pole.setAttribute('x1', 0); pole.setAttribute('y1', 0);
+      pole.setAttribute('x2', 0); pole.setAttribute('y2', -26);
+      pole.setAttribute('class', 'start-pole');
+      var pennant = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+      pennant.setAttribute('points', '0,-26 16,-20 0,-14');
+      pennant.setAttribute('class', 'start-pennant');
+      startEl.appendChild(pole);
+      startEl.appendChild(pennant);
+      startGroup.appendChild(startEl);
+    }
+
+    if(finishGroup){
+      finishGroup.innerHTML = '';
+      var endPt = path.getPointAtLength(totalLength);
+      var backPt = path.getPointAtLength(Math.max(0, totalLength - 2));
+      var angle = Math.atan2(endPt.y - backPt.y, endPt.x - backPt.x) * 180 / Math.PI;
+      var barLength = LANE_HALF * 2 + 16;
+      var bar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      bar.setAttribute('x', -barLength / 2);
+      bar.setAttribute('y', -6);
+      bar.setAttribute('width', barLength);
+      bar.setAttribute('height', 12);
+      bar.setAttribute('class', 'finish-bar');
+      bar.setAttribute('transform', 'translate(' + endPt.x + ',' + endPt.y + ') rotate(' + (angle + 90) + ')');
+      finishGroup.appendChild(bar);
+    }
   }
 
   function buildEdges(halfWidth){
@@ -144,11 +192,11 @@ var GAME_ENABLED = true;
     foldRaf = requestAnimationFrame(step);
   }
 
-  function buildCollectibles(sectionCount){
+  function buildCollectibles(){
     collectiblesGroup.innerHTML = '';
-    var totalLength = path.getTotalLength();
-    var total = sectionCount * COLLECTIBLES_PER_SECTION;
     var collectibles = [];
+    var totalLength = path.getTotalLength();
+    var collectiblePoints = isMobileLayout() ? COLLECTIBLE_POINTS_MOBILE : COLLECTIBLE_POINTS;
 
     // Kachel-Bounding-Boxen (mit Puffer), damit Objekte nicht unter einer Kachel landen, wo sie kaum sichtbar wären
     var cardRects = Array.prototype.map.call(document.querySelectorAll('.pillar, .ref, .player, .contact'), function(el){
@@ -158,6 +206,7 @@ var GAME_ENABLED = true;
     function underCard(x, y){
       return cardRects.some(function(r){ return x > r.left && x < r.right && y > r.top && y < r.bottom; });
     }
+    // Weicht entlang des Pfads (nicht seitlich!) aus, damit der Punkt immer exakt auf der Mittellinie bleibt
     function clearPoint(t0){
       var pt = path.getPointAtLength(t0 * totalLength);
       if(!underCard(pt.x, pt.y)) return pt;
@@ -172,8 +221,7 @@ var GAME_ENABLED = true;
       return path.getPointAtLength(t0 * totalLength); // kein freier Punkt in der Nähe gefunden, ursprüngliche Position als Fallback
     }
 
-    for(var i = 0; i < total; i++){
-      var t = (i + 0.5) / total;
+    collectiblePoints.forEach(function(t, i){
       var pt = clearPoint(t);
       var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
       circle.setAttribute('class', 'collectible');
@@ -184,7 +232,8 @@ var GAME_ENABLED = true;
       circle.style.setProperty('--glow', accentColor(i));
       collectiblesGroup.appendChild(circle);
       collectibles.push({x: pt.x, y: pt.y, el: circle, collected: false});
-    }
+    });
+
     window.GameTrack.collectibles = collectibles;
     window.GameTrack.total = collectibles.length;
     window.GameTrack.collected = 0;
@@ -208,6 +257,7 @@ var GAME_ENABLED = true;
   var sprite = document.getElementById('gameSprite');
   var trailCanvas = document.getElementById('gameTrail');
   var trailCtx = trailCanvas && trailCanvas.getContext('2d');
+  var contactLink = document.querySelector('.contact a[href^="mailto:"]');
   if(!toggle || !sprite) return;
 
   var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -229,6 +279,8 @@ var GAME_ENABLED = true;
   ];
 
   var active = false;
+  var gameFinished = false; // true, sobald während einer laufenden Runde alles eingesammelt wurde
+  var startTime = null; // Zeitstempel des Rundenbeginns, für den versteckten Timer
   var pos = {x:0,y:0};
   var target = {x:0,y:0};
   var keys = {ArrowUp:false,ArrowDown:false,ArrowLeft:false,ArrowRight:false};
@@ -274,7 +326,7 @@ var GAME_ENABLED = true;
     }
 
     // Kachel-Highlight: gröbere Grenze, damit ein innerer Link (z.B. in aufgeklappten Panels) das Highlight nicht unterbricht
-    var tile = hit && hit.closest('.pillar, .ref, .player, .btn');
+    var tile = hit && hit.closest('.pillar, .ref, .player, .btn, .contact');
     if(tile !== hoveredTile){
       if(hoveredTile){
         if(window.setTileHover) window.setTileHover(hoveredTile, false);
@@ -361,15 +413,25 @@ var GAME_ENABLED = true;
         c.collected = true;
         c.el.classList.add('collected');
         track.collected++;
+        var finished = track.collected === track.total;
         var countEl = document.getElementById('collectCount');
         if(countEl){
-          countEl.textContent = track.collected + ' / ' + track.total;
+          var label = track.collected + ' / ' + track.total;
+          if(finished && startTime !== null){
+            label += ' (' + Math.round((performance.now() - startTime) / 1000) + 's)';
+          }
+          countEl.textContent = label;
           countEl.classList.remove('count-pop');
           void countEl.offsetWidth; // Reflow erzwingen, damit die Animation bei schnell aufeinanderfolgenden Treffern jedes Mal neu startet
           countEl.classList.add('count-pop');
         }
         spawnBurst(c.x - window.scrollX, c.y - window.scrollY);
-        if(track.collected === track.total) triggerWin();
+        if(finished){
+          gameFinished = true;
+          toggle.lastChild.textContent = 'Spiel Neustarten';
+          if(icon) icon.classList.remove('is-playing');
+          triggerWin();
+        }
       }
     });
   }
@@ -410,7 +472,10 @@ var GAME_ENABLED = true;
 
   function start(e){
     active = true;
+    gameFinished = false;
+    startTime = performance.now();
     document.body.classList.add('game-active');
+    document.body.classList.remove('game-finished');
     if(window.GameTrack) window.GameTrack.unfold();
     toggle.lastChild.textContent = 'Spiel beenden';
     toggle.setAttribute('aria-pressed','true');
@@ -467,7 +532,9 @@ var GAME_ENABLED = true;
   window.addEventListener('resize', resizeTrail);
 
   toggle.addEventListener('click', function(e){
-    active ? stop() : start(e);
+    if(active && gameFinished){ stop(); start(e); }
+    else if(active){ stop(); }
+    else{ start(e); }
   });
 
   window.addEventListener('keydown', function(e){
@@ -475,7 +542,11 @@ var GAME_ENABLED = true;
     if(!active) return;
     if(e.code === 'Space'){
       e.preventDefault();
-      if(focusedEl && (focusedEl.tagName === 'A' || focusedEl.tagName === 'BUTTON')) focusedEl.click();
+      if(hoveredTile && hoveredTile.classList.contains('contact') && contactLink){
+        contactLink.click();
+      } else if(focusedEl && (focusedEl.tagName === 'A' || focusedEl.tagName === 'BUTTON')){
+        focusedEl.click();
+      }
       return;
     }
     if(e.key in keys){ keys[e.key] = true; lastInputType = 'keyboard'; e.preventDefault(); }
@@ -521,4 +592,14 @@ var GAME_ENABLED = true;
       clampTarget();
     });
   });
+
+  // "Schreibt uns" während des Spiels: Ziel erreicht -> Sieg-Effekt im Header, Spiel beenden (Punktzahl bleibt stehen)
+  if(contactLink){
+    contactLink.addEventListener('click', function(){
+      if(!active) return;
+      triggerWin();
+      stop();
+      document.body.classList.add('game-finished'); // hält das Score-Badge sichtbar, obwohl game-active entfernt wurde
+    });
+  }
 })();

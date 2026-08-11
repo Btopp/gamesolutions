@@ -16,7 +16,7 @@
 
 <header>
   <div class="wrap nav">
-    <div class="brand"><span class="coin"></span>Gamesolutions</div>
+    <div class="brand"><span class="coin"></span><span class="brand-name">Gamesolutions</span></div>
     <span class="collect-badge" id="collectBadge">
       <span class="collect-icon" id="collectIcon" aria-hidden="true"></span>
       <span id="collectCount"></span>
@@ -46,18 +46,25 @@
       <stop class="tg-2" offset="50%"/>
       <stop class="tg-3" offset="100%"/>
     </linearGradient>
+    <pattern id="finish-checker" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect width="10" height="10" fill="#fff"/>
+      <rect width="5" height="5" fill="#1a0a12"/>
+      <rect x="5" y="5" width="5" height="5" fill="#1a0a12"/>
+    </pattern>
   </defs>
   <path class="track-path"></path>
   <path class="track-edge track-edge-a"></path>
   <path class="track-edge track-edge-b"></path>
   <g class="track-collectibles"></g>
+  <g class="track-start"></g>
+  <g class="track-finish"></g>
 </svg>
 
 <!-- HERO -->
 <section class="hero" id="start">
   <div class="wrap">
     <div class="hero-inner">
-      <span class="eyebrow">Event · Messe · Party</span>
+      <span class="eyebrow">Festival · Messe · Events</span>
       <h1>Spiele, die euer Event zum <span class="hl">Erlebnis</span> machen.</h1>
       <p class="lead">Wir entwickeln interaktive, spielbasierte Erlebnisse — maßgeschneidert auf euren Anlass und euer Publikum.</p>
       <div class="cta-row">

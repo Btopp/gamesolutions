@@ -35,7 +35,7 @@
   // .char-hover löst dieselbe optische Hervorhebung wie :hover aus (siehe styles.css), da der Charakter kein echtes :hover triggert.
   // Getrennt von expandCard/collapseCard, da .pillar kein Akkordeon-Panel hat, aber trotzdem highlighten soll.
   window.setTileHover = function(el, hovered){
-    if(!el || !el.matches('.pillar, .ref, .player, .btn')) return;
+    if(!el || !el.matches('.pillar, .ref, .player, .btn, .contact')) return;
     el.classList.toggle('char-hover', hovered);
   };
   window.expandCard = function(card){
@@ -78,7 +78,7 @@
   if(!contact || !link) return;
   contact.addEventListener('click', function(e){
     if(e.target.closest('a')) return;
-    window.location.href = link.href;
+    link.click();
   });
 })();
 
