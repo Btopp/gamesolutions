@@ -1,0 +1,108 @@
+/* ============================================================
+   SPIEL-MODUL — Styles vollständig getrennt vom restlichen Layout.
+   Wird nur gebraucht, wenn GAME_ENABLED in game.js auf true steht.
+   ============================================================ */
+
+.game-icon{
+  display:inline-block;flex:none;
+  width:0;height:0;
+  border-style:solid;border-width:6px 0 6px 9px;
+  border-color:transparent transparent transparent #1a0a12;
+  animation:blink 1.1s steps(1) infinite;
+}
+.game-icon.is-playing{
+  width:9px;height:9px;border:none;border-radius:2px;
+  background:#1a0a12;
+}
+
+/* ---------- Rennstrecke ---------- */
+.game-track{position:absolute;top:0;left:0;width:100%;pointer-events:none;z-index:-1}
+.tg-1{stop-color:var(--pink)}
+.tg-2{stop-color:var(--cyan)}
+.tg-3{stop-color:var(--gold)}
+.track-path{
+  fill:none;stroke:var(--line-2);stroke-width:2;stroke-dasharray:8 6;stroke-linecap:round;
+  transition:opacity .3s ease;
+}
+body.game-active .track-path{opacity:0}
+.track-edge{
+  fill:none;stroke:var(--line-2);stroke-width:2;stroke-linecap:round;
+  opacity:0;
+  transition:stroke .3s ease,stroke-width .3s ease,filter .3s ease,opacity .3s ease;
+}
+body.game-active .track-edge{
+  opacity:1;
+  stroke:url(#track-gradient);stroke-width:2.5;
+  filter:drop-shadow(0 0 6px rgba(45,226,230,.5));
+  stroke-dasharray:10 8;
+  animation:track-flow 2s linear infinite;
+}
+@keyframes track-flow{to{stroke-dashoffset:-36}}
+.collectible{
+  opacity:0;transform-origin:center;
+  transition:opacity .3s ease,filter .3s ease;
+  animation:collectible-pulse 1.6s ease-in-out infinite;
+}
+body.game-active .collectible{
+  opacity:.85;
+  filter:drop-shadow(0 0 4px var(--glow)) drop-shadow(0 0 10px var(--glow));
+}
+.collectible.collected{opacity:0!important;transition:opacity .4s ease,transform .4s ease;transform:scale(2)}
+@keyframes collectible-pulse{50%{opacity:.45}}
+.collect-badge{
+  display:none;align-items:center;gap:12px;
+  font-family:"Space Mono",monospace;font-size:14px;color:var(--cloud);
+}
+body.game-active .collect-badge{display:inline-flex}
+.collect-icon{
+  width:14px;height:14px;flex:none;
+  border-radius:50%;
+  background:var(--muted);
+  transition:background .3s ease;
+}
+body.game-active .collect-icon{background:var(--gold)}
+.collect-icon.win{
+  border-radius:0;
+  clip-path:polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  background:var(--gold);
+  filter:drop-shadow(0 0 6px var(--gold));
+  animation:win-pop .5s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes win-pop{
+  0%{transform:scale(0) rotate(-20deg)}
+  60%{transform:scale(1.25) rotate(8deg)}
+  100%{transform:scale(1) rotate(0deg)}
+}
+#collectCount{display:inline-block;transform-origin:center}
+#collectCount.count-pop{animation:count-pop .35s ease}
+@keyframes count-pop{
+  0%{transform:scale(1)}
+  45%{transform:scale(1.4)}
+  100%{transform:scale(1)}
+}
+
+/* ---------- Game Sprite ---------- */
+.game-trail{position:fixed;inset:0;pointer-events:none;z-index:9998;display:none}
+body.game-active .game-trail{display:block}
+.game-sprite{
+  position:fixed;top:0;left:0;
+  width:20px;height:20px;border-radius:5px;
+  background:var(--pink);
+  box-shadow:10px 0 0 var(--cyan),20px 0 0 var(--gold);
+  pointer-events:none;z-index:9999;
+  display:none;
+}
+.game-sprite::before{
+  content:"";
+  position:absolute;
+  left:20px;top:10px; /* = SPRITE_CENTER_X/Y aus game.js: visuelle Mitte des 40x20px-Sprites */
+  width:150px;height:150px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(255,61,138,.22), rgba(45,226,230,.14) 45%, transparent 70%);
+  filter:blur(6px);
+  z-index:-1;
+  pointer-events:none;
+}
+body.game-active,body.game-active *{cursor:none!important} /* Nachfahren mit eigenem cursor (Buttons, Kacheln, Menü) übersteuern sonst die Vererbung */
+body.game-active .game-sprite{display:block}

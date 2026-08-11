@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gamesolutions — Interaktive Erlebnisse für Event, Messe & Party</title>
+<meta name="description" content="Gamesolutions entwickelt interaktive, spielbasierte Erlebnisse — maßgeschneidert für Events, Messen und Partys.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Familjen+Grotesk:wght@400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="game.css">
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="brand"><span class="coin"></span>Gamesolutions</div>
+    <span class="collect-badge" id="collectBadge">
+      <span class="collect-icon" id="collectIcon" aria-hidden="true"></span>
+      <span id="collectCount"></span>
+    </span>
+    <div class="menu" id="menu">
+      <button class="menu-trigger" aria-expanded="false" aria-controls="menu-panel" aria-label="Menü öffnen">
+        <span class="bars" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Menü</span>
+      </button>
+      <nav class="menu-panel" id="menu-panel" aria-label="Seitennavigation">
+        <a href="#start">Start</a>
+        <a href="#machen">Was wir machen</a>
+        <a href="#referenzen">Referenzen</a>
+        <a href="#team">Team</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
+  </div>
+</header>
+
+<div class="spot" id="spot" aria-hidden="true"></div>
+
+<svg id="gameTrack" class="game-track" aria-hidden="true">
+  <defs>
+    <linearGradient id="track-gradient" x1="0" y1="0" x2="0" y2="1">
+      <stop class="tg-1" offset="0%"/>
+      <stop class="tg-2" offset="50%"/>
+      <stop class="tg-3" offset="100%"/>
+    </linearGradient>
+  </defs>
+  <path class="track-path"></path>
+  <path class="track-edge track-edge-a"></path>
+  <path class="track-edge track-edge-b"></path>
+  <g class="track-collectibles"></g>
+</svg>
+
+<!-- HERO -->
+<section class="hero" id="start">
+  <div class="wrap">
+    <div class="hero-inner">
+      <span class="eyebrow">Event · Messe · Party</span>
+      <h1>Spiele, die euer Event zum <span class="hl">Erlebnis</span> machen.</h1>
+      <p class="lead">Wir entwickeln interaktive, spielbasierte Erlebnisse — maßgeschneidert auf euren Anlass und euer Publikum.</p>
+      <div class="cta-row">
+        <a class="btn btn-ghost" href="#kontakt"><span class="btn-icon" aria-hidden="true">✉</span>Kontakt</a>
+        <button type="button" class="btn btn-primary" id="gameToggle" aria-pressed="false"><span class="game-icon" id="gameIcon" aria-hidden="true"></span>Los geht's</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WAS WIR MACHEN -->
+<section class="block" id="machen">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Was wir machen</span>
+      <h2>Ein Erlebnis, das zu euch passt — nicht von der Stange.</h2>
+      <p>Ob Messestand, Firmenevent oder Party: Wir bauen das interaktive Spiel drumherum. Von der ersten Idee über die technische Umsetzung bis zum Aufbau vor Ort kommt alles aus einer Hand.</p>
+    </div>
+    <div class="pillars">
+      <div class="pillar reveal" tabindex="-1">
+        <span class="num">01</span>
+        <h3>Konzept &amp; Gestaltung</h3>
+        <p>Idee, Look und Spielprinzip. 2D- und 3D-Design für ein Erlebnis, das im Kopf bleibt.</p>
+      </div>
+      <div class="pillar reveal" tabindex="-1">
+        <span class="num">02</span>
+        <h3>Spiel &amp; Technik</h3>
+        <p>Game Design, Software-Entwicklung und Hardware. Wir setzen um, was wir uns ausdenken — stabil und bereit für den Live-Betrieb.</p>
+      </div>
+      <div class="pillar reveal" tabindex="-1">
+        <span class="num">03</span>
+        <h3>Aufbau &amp; Ablauf vor Ort</h3>
+        <p>Planung, Logistik und Betreuung, damit am Eventtag alles läuft.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REFERENZEN -->
+<section class="block" id="referenzen">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Referenzen</span>
+      <h2>Bisherige Projekte.</h2>
+      <p>Ein Ausschnitt aus dem, was wir schon umgesetzt haben.</p>
+    </div>
+    <div class="refs">
+      <article class="ref reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="ref-panel-1">
+        <div class="ref-media">
+          <img class="ref-img" src="resources/images/ref_gamejam.png" alt="Gamejam" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+          <div class="ref-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5L5 20"/>
+            </svg>
+            <span class="ref-media-label">Foto folgt</span>
+          </div>
+        </div>
+        <div class="ref-body">
+          <div class="ref-top"><span class="ref-tag">Gamejam</span></div>
+          <h3>Von der Idee zum spielbaren Konzept – live erlebt <span class="chev" aria-hidden="true">+</span></h3>
+          <p>Gamejams sind unser Ding – wir haben selbst schon einige organisiert und noch mehr davon einfach mitgespielt.</p>
+          <div class="ref-panel" id="ref-panel-1" hidden>
+            <p>Gamejams sind bei uns keine einmalige Sache, sondern echte Leidenschaft: In kleinen Teams entwickelt man dabei innerhalb weniger Tage – oft an einem Wochenende – auf Basis eines zufälligen Themas ein komplettes Spiel. Wir haben selbst mehrere kleine Gamejams organisiert und moderiert – sowohl vor Ort als auch als Online-Event – und darüber hinaus an vielen weiteren als Teilnehmer mitgemacht. Uns geht's dabei nicht nur ums Coden und Konzipieren, sondern genauso ums Zusammensein: gemeinsam kreativ werden, sich gegenseitig weiterbringen und dabei selbst etwas dazulernen, aus einer guten Idee gemeinsam etwas Spielbares machen – und dabei einfach Spaß haben. Genau diese Erfahrung bringen wir mit, wenn wir Spielkonzepte für euer Event entwickeln.</p>
+            <div class="ref-links">
+              <a href="https://itch.io/jam/imgly" target="_blank" rel="noopener">itch.io/jam/imgly ↗</a>
+              <a href="https://itch.io/jam/do-not-use-the-playground" target="_blank" rel="noopener">itch.io/jam/do-not-use-the-playground ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="ref reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="ref-panel-2">
+        <div class="ref-media">
+          <img class="ref-img" src="resources/images/ref_games.png" alt="Games" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+          <div class="ref-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5L5 20"/>
+            </svg>
+            <span class="ref-media-label">Foto folgt</span>
+          </div>
+        </div>
+        <div class="ref-body">
+          <div class="ref-top"><span class="ref-tag">Games</span></div>
+          <h3>Unser Spiele-Repertoire <span class="chev" aria-hidden="true">+</span></h3>
+          <p>Von schnellen Jam-Prototypen bis zum Steam-Projekt – unsere Spiele zeigen die Bandbreite dessen, was wir bauen können.</p>
+          <div class="ref-panel" id="ref-panel-2" hidden>
+            <p>Ob Strategie, Action oder Survival – wir bewegen uns gerne in ganz unterschiedlichen Genres. Mit TimeWhip entwickeln wir ein taktisches Echtzeit-Strategiespiel mit Zeitmechanik und Rogue-Elementen. Tiny Bow Guy ist unsere moderne Neuinterpretation eines Klassikers aus den 90ern – ein charmantes Arcade-Actionspiel rund um einen kleinen Bogenschützen. Drill to Win entstand innerhalb weniger Stunden auf einem Gamejam: ein knackiges Bohrspiel mit Ressourcen-Mechanik, komplett aus einer spontanen Idee heraus umgesetzt. Und mit Mycofall zeigen wir, dass wir auch größere Projekte stemmen: ein Bullet-Hell-Survival-Spiel mit Koop-Modus, mittlerweile auch auf Steam zu finden. Von der kleinen Idee bis zum ausgewachsenen Release – genau dieses Spektrum an Erfahrung bringen wir in jedes Spielkonzept ein, das wir für euer Event entwickeln.</p>
+            <div class="ref-links">
+              <a href="https://store.steampowered.com/app/3701190/Mycofall/" target="_blank" rel="noopener">store.steampowered.com/app/3701190/Mycofall ↗</a>
+              <a href="https://sharkblaster.itch.io/timewhip" target="_blank" rel="noopener">sharkblaster.itch.io/timewhip ↗</a>
+              <a href="https://bantol.itch.io/drill-to-win" target="_blank" rel="noopener">bantol.itch.io/drill-to-win ↗</a>
+              <a href="https://btopp.itch.io/tinybowguy" target="_blank" rel="noopener">btopp.itch.io/tinybowguy ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+      <article class="ref reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="ref-panel-3">
+        <div class="ref-media">
+          <img class="ref-img" src="resources/images/ref_karamba.png" alt="Karamba" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+          <div class="ref-placeholder">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 16l-5-5L5 20"/>
+            </svg>
+            <span class="ref-media-label">Foto folgt</span>
+          </div>
+        </div>
+        <div class="ref-body">
+          <div class="ref-top"><span class="ref-tag">Event</span></div>
+          <h3>Gaming auf dem Dancefloor <span class="chev" aria-hidden="true">+</span></h3>
+          <p>Aus unserem eigenen Spiel „Bounzy Ballz" wurde bei der Karamba in der Bside ein Tanzmatten-Erlebnis, live per Beamer auf den Dancefloor projiziert.</p>
+          <div class="ref-panel" id="ref-panel-3" hidden>
+            <p>Bounzy Ballz ist ein von uns entwickeltes Arcade-Pinball-Spiel mit Neon-Optik, bei dem es um Highscores und große Combos geht – eigentlich gedacht zum Spielen am Bildschirm. Für die Karamba in der Bside haben wir daraus etwas ganz Neues gemacht: Statt Maus oder Touch steuert eine Tanzmatte das Spiel, projiziert per Beamer mitten auf den Dancefloor. Techno-Sound trifft auf ein Spielkonzept, das die Gäste körperlich in Bewegung bringt – wer punkten will, muss tanzen. Über mehrere Karamba-Veranstaltungen hinweg haben wir das Setup immer weiter verfeinert und passgenau auf das jeweilige Event zugeschnitten. Genau so gehen wir auch bei euch vor: ein bestehendes Konzept oder eine ganz neue Idee, angepasst an euren Ort, euer Publikum und den Vibe eures Events.</p>
+            <div class="ref-links">
+              <a href="https://b-side.ms/events/31de-karamba-strassenfest-aftershow" target="_blank" rel="noopener">b-side.ms/events/31de-karamba-strassenfest-aftershow ↗</a>
+              <a href="https://btopp.itch.io/bounzyballz" target="_blank" rel="noopener">btopp.itch.io/bounzyballz ↗</a>
+            </div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section class="block" id="team">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Team</span>
+      <h2>Drei Leute, drei Blickwinkel.</h2>
+      <p>Konzept, Technik und Umsetzung — bei uns greift das ineinander, statt über drei Dienstleister verteilt zu sein.</p>
+      <p class="hint">Auf einen Namen klicken für Kontakt.</p>
+    </div>
+    <div class="team">
+      <div class="player reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="c-marcel">
+        <span class="badge">Konzept &amp; Gestaltung</span>
+        <h3>Marcel Maier <span class="chev" aria-hidden="true">+</span></h3>
+        <div class="role">Konzeptionell, grafisch, kreativ</div>
+        <div class="tags">
+          <span class="tag">Konzeption</span>
+          <span class="tag">Kreativ</span>
+          <span class="tag">2D &amp; 3D Art</span>
+        </div>
+        <div class="contact-panel" id="c-marcel" hidden>
+          <div class="person-photo">
+            <img class="person-img" src="resources/images/team_marcel.png" alt="Marcel Maier" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+            <div class="person-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+              <span class="person-photo-label">Foto folgt</span>
+            </div>
+            <div class="person-overlay"><p class="person-info">Kurzinfo zu Marcel folgt hier.</p></div>
+          </div>
+          <div class="contact-line">✉ <a href="mailto:marcel@gamesolutions.example">marcel@gamesolutions.example</a></div>
+          <div class="contact-line">🔗 <span class="contact-placeholder">Portfolio folgt</span></div>
+        </div>
+      </div>
+      <div class="player reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="c-niklas">
+        <span class="badge">Spiel &amp; Technik</span>
+        <h3>Niklas Bachmann <span class="chev" aria-hidden="true">+</span></h3>
+        <div class="role">Game Design und Entwicklung</div>
+        <div class="tags">
+          <span class="tag">Game Design</span>
+          <span class="tag">Software-Entwicklung</span>
+          <span class="tag">IT &amp; Technik</span>
+        </div>
+        <div class="contact-panel" id="c-niklas" hidden>
+          <div class="person-photo">
+            <img class="person-img" src="resources/images/team_niklas.png" alt="Niklas Bachmann" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+            <div class="person-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+              <span class="person-photo-label">Foto folgt</span>
+            </div>
+            <div class="person-overlay"><p class="person-info">Kurzinfo zu Niklas folgt hier.</p></div>
+          </div>
+          <div class="contact-line">✉ <a href="mailto:niklasbachmann.code@gmail.com">niklasbachmann.code@gmail.com</a></div>
+          <div class="contact-line">🔗 <a href="https://btopp.itch.io/" target="_blank" rel="noopener">btopp.itch.io</a></div>
+        </div>
+      </div>
+      <div class="player reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="c-vincent">
+        <span class="badge">Aufbau &amp; Ablauf</span>
+        <h3>Vincent Halstrick <span class="chev" aria-hidden="true">+</span></h3>
+        <div class="role">Umsetzung, Events und Logistik</div>
+        <div class="tags">
+          <span class="tag">Entwickler-Background</span>
+          <span class="tag">Analytischer Background</span>
+          <span class="tag">Veranstaltung &amp; Logistik</span>
+        </div>
+        <div class="contact-panel" id="c-vincent" hidden>
+          <div class="person-photo">
+            <img class="person-img" src="resources/images/team_vincent.png" alt="Vincent Halstrick" onload="this.classList.add('is-loaded')" onerror="this.remove()">
+            <div class="person-placeholder">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
+              <span class="person-photo-label">Foto folgt</span>
+            </div>
+            <div class="person-overlay"><p class="person-info">Kurzinfo zu Vincent folgt hier.</p></div>
+          </div>
+          <div class="contact-line">✉ <a href="mailto:vincent@gamesolutions.example">vincent@gamesolutions.example</a></div>
+          <div class="contact-line">🔗 <span class="contact-placeholder">Portfolio folgt</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section class="block" id="kontakt">
+  <div class="wrap">
+    <div class="contact reveal">
+      <span class="eyebrow">Kontakt</span>
+      <h2>Habt ihr ein Event, das ein Spiel gebrauchen kann?</h2>
+      <p>Erzählt uns davon — wir melden uns.</p>
+      <a class="btn btn-primary" href="mailto:niklasbachmann.code@gmail.com"><span class="blink"></span>Schreibt uns</a>
+    </div>
+  </div>
+</section>
+
+<canvas id="gameTrail" class="game-trail" aria-hidden="true"></canvas>
+<div class="game-sprite" id="gameSprite" aria-hidden="true"></div>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 Gamesolutions</span>
+    <span class="names">Bachmann · Maier · Halstrick</span>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+<script src="game.js"></script>
+
+</body>
+</html>
