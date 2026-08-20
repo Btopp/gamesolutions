@@ -61,10 +61,16 @@
 </svg>
 
 <!-- HERO -->
-<section class="hero" id="start">
+<!-- Aktuell im Festival-Modus: zeigt "Currently at: Moyn" statt der generischen Eyebrow.
+     Zum Zurückschalten auf die generische Variante einfach die Klasse "hero-festival-mode" hier entfernen. -->
+<section class="hero hero-festival-mode" id="start">
   <div class="wrap">
     <div class="hero-inner">
-      <span class="eyebrow">Festival · Messe · Events</span>
+      <span class="eyebrow hero-eyebrow">Festival · Messe · Events</span>
+      <div class="hero-live" id="heroLive">
+        <span class="hero-live-label">Currently at:</span>
+        <img class="hero-live-logo" src="resources/images/moyn-logo.svg" alt="Moyn Festival" onerror="this.closest('.hero-live').remove()">
+      </div>
       <h1>Spiele, die euer Event zum <span class="hl">Erlebnis</span> machen.</h1>
       <p class="lead">Wir entwickeln interaktive, spielbasierte Erlebnisse — maßgeschneidert auf euren Anlass und euer Publikum.</p>
       <div class="cta-row">
@@ -182,9 +188,9 @@
         <div class="ref-body">
           <div class="ref-top"><span class="ref-tag">Event</span></div>
           <h3>Gaming auf dem Dancefloor <span class="chev" aria-hidden="true">+</span></h3>
-          <p>Aus unserem eigenen Spiel „Bounzy Ballz" wurde bei der Karamba in der Bside ein Tanzmatten-Erlebnis, live per Beamer auf den Dancefloor projiziert.</p>
+          <p>Aus unserem eigenen Spiel „Bounzy Ballz" wurde bei der Karamba in der B-Side ein Tanzmatten-Erlebnis, live per Beamer auf den Dancefloor projiziert.</p>
           <div class="ref-panel" id="ref-panel-3" hidden>
-            <p>Bounzy Ballz ist ein von uns entwickeltes Arcade-Pinball-Spiel mit Neon-Optik, bei dem es um Highscores und große Combos geht – eigentlich gedacht zum Spielen am Bildschirm. Für die Karamba in der Bside haben wir daraus etwas ganz Neues gemacht: Statt Maus oder Touch steuert eine Tanzmatte das Spiel, projiziert per Beamer mitten auf den Dancefloor. Techno-Sound trifft auf ein Spielkonzept, das die Gäste körperlich in Bewegung bringt – wer punkten will, muss tanzen. Über mehrere Karamba-Veranstaltungen hinweg haben wir das Setup immer weiter verfeinert und passgenau auf das jeweilige Event zugeschnitten. Genau so gehen wir auch bei euch vor: ein bestehendes Konzept oder eine ganz neue Idee, angepasst an euren Ort, euer Publikum und den Vibe eures Events.</p>
+            <p>Bounzy Ballz ist ein von uns entwickeltes Arcade-Pinball-Spiel mit Neon-Optik, bei dem es um Highscores und große Combos geht – eigentlich gedacht zum Spielen am Bildschirm. Für die Karamba in der B-Side haben wir daraus etwas ganz Neues gemacht: Statt Maus oder Touch steuert eine Tanzmatte das Spiel, projiziert per Beamer mitten auf den Dancefloor. Techno-Sound trifft auf ein Spielkonzept, das die Gäste körperlich in Bewegung bringt – wer punkten will, muss tanzen. Über mehrere Karamba-Veranstaltungen hinweg haben wir das Setup immer weiter verfeinert und passgenau auf das jeweilige Event zugeschnitten. Genau so gehen wir auch bei euch vor: ein bestehendes Konzept oder eine ganz neue Idee, angepasst an euren Ort, euer Publikum und den Vibe eures Events.</p>
             <div class="ref-links">
               <a href="https://b-side.ms/events/31de-karamba-strassenfest-aftershow" target="_blank" rel="noopener">b-side.ms/events/31de-karamba-strassenfest-aftershow ↗</a>
               <a href="https://btopp.itch.io/bounzyballz" target="_blank" rel="noopener">btopp.itch.io/bounzyballz ↗</a>
@@ -222,10 +228,12 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
               <span class="person-photo-label">Foto folgt</span>
             </div>
-            <div class="person-overlay"><p class="person-info">Kurzinfo zu Marcel folgt hier.</p></div>
+            <div class="person-overlay"><p class="person-info">Mit den Gedanken tief in einer Story oder einem Konzept, hat aber immer das richtige Auge für Grafiken und Designs.</p></div>
           </div>
+          <!-- Mail & Portfolio temporär ausgeblendet, bis echte Infos vorliegen:
           <div class="contact-line">✉ <a href="mailto:marcel@gamesolutions.example">marcel@gamesolutions.example</a></div>
           <div class="contact-line">🔗 <span class="contact-placeholder">Portfolio folgt</span></div>
+          -->
         </div>
       </div>
       <div class="player reveal" role="button" tabindex="0" aria-expanded="false" aria-controls="c-niklas">
@@ -244,7 +252,7 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
               <span class="person-photo-label">Foto folgt</span>
             </div>
-            <div class="person-overlay"><p class="person-info">Kurzinfo zu Niklas folgt hier.</p></div>
+            <div class="person-overlay"><p class="person-info">Dirigiert die Technik aus dem Homeoffice – Mate in der einen, Maus in der anderen Hand.</p></div>
           </div>
           <div class="contact-line">✉ <a href="mailto:niklasbachmann.code@gmail.com">niklasbachmann.code@gmail.com</a></div>
           <div class="contact-line">🔗 <a href="https://btopp.itch.io/" target="_blank" rel="noopener">btopp.itch.io</a></div>
@@ -266,10 +274,12 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-7 8-7s8 3 8 7"/></svg>
               <span class="person-photo-label">Foto folgt</span>
             </div>
-            <div class="person-overlay"><p class="person-info">Kurzinfo zu Vincent folgt hier.</p></div>
+            <div class="person-overlay"><p class="person-info">Für euch vor Ort auf dem Moyn Festival unterwegs – schaut vorbei, er hat ein kleines Spiel für euch dabei!</p></div>
           </div>
+          <!-- Mail & Portfolio temporär ausgeblendet, bis echte Infos vorliegen:
           <div class="contact-line">✉ <a href="mailto:vincent@gamesolutions.example">vincent@gamesolutions.example</a></div>
           <div class="contact-line">🔗 <span class="contact-placeholder">Portfolio folgt</span></div>
+          -->
         </div>
       </div>
     </div>
@@ -294,7 +304,7 @@
 <footer>
   <div class="wrap foot">
     <span>© 2026 Gamesolutions</span>
-    <span class="names">Bachmann · Maier · Halstrick · v.1.1</span>
+    <span class="names">Bachmann · Maier · Halstrick · v.1.2</span>
   </div>
 </footer>
 

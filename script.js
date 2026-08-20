@@ -79,13 +79,18 @@
   if(!menu || !trigger) return;
   function setOpen(state){
     menu.classList.toggle('open', state);
+    menu.classList.toggle('force-closed', !state);
     trigger.setAttribute('aria-expanded', String(state));
     trigger.setAttribute('aria-label', state ? 'Menü schließen' : 'Menü öffnen');
   }
   trigger.addEventListener('click', function(e){
     e.stopPropagation();
-    setOpen(!menu.classList.contains('open'));
+    var next = !menu.classList.contains('open');
+    setOpen(next);
+    if(!next) trigger.blur();
   });
+  menu.addEventListener('mouseenter', function(){ menu.classList.remove('force-closed'); });
+  menu.addEventListener('mouseleave', function(){ menu.classList.remove('force-closed'); });
   menu.querySelectorAll('.menu-panel a').forEach(function(a){
     a.addEventListener('click', function(){ setOpen(false); });
   });
