@@ -47,6 +47,7 @@ var GAME_ENABLED = true;
   var LANE_HALF = 42; // Abstand jeder Begrenzungslinie von der Mittelachse (volle Breite bei aufgeklappter Strecke)
   var foldWidth = 0; // aktueller Begrenzungs-Abstand; 0 = eingeklappt (nur Mittellinie), animiert via unfold()/fold()
   var foldRaf = null;
+  var edgeSamples = null; // Stützpunkte + Normalen der Streckenmitte, gecached von computeEdgeSamples() — macht buildEdges() während der Fold-Animation zu reiner Arithmetik statt teurer SVG-Geometrieabfragen pro Frame
 
   window.GameTrack = {
     collectibles: [], total: 0, collected: 0,
@@ -107,6 +108,7 @@ var GAME_ENABLED = true;
     svg.style.height = docHeight + 'px';
     svg.setAttribute('viewBox', '0 0 ' + docWidth + ' ' + docHeight);
 
+    computeEdgeSamples();
     buildEdges(foldWidth);
     buildMarkers();
 
@@ -152,22 +154,36 @@ var GAME_ENABLED = true;
     }
   }
 
-  function buildEdges(halfWidth){
+  // Stützpunkte + Normalenvektoren entlang der Streckenmitte — hängt nur von der Kurvenform ab, die sich
+  // während der Fold-Animation nicht ändert. Deshalb hier einmalig (bei buildTrack()) berechnet statt,
+  // wie zuvor, bei jedem einzelnen Animationsframe erneut per teurer SVG-Geometrieabfrage.
+  function computeEdgeSamples(){
     if(!edgeA || !edgeB) return;
-    if(halfWidth === undefined) halfWidth = LANE_HALF;
     var totalLength = path.getTotalLength();
-    var samples = Math.max(40, Math.round(totalLength / 40));
+    var count = Math.max(40, Math.round(totalLength / 60));
     var eps = 2;
-    var ptsA = [], ptsB = [];
-    for(var i = 0; i <= samples; i++){
-      var len = (i / samples) * totalLength;
+    var samples = [];
+    for(var i = 0; i <= count; i++){
+      var len = (i / count) * totalLength;
       var p = path.getPointAtLength(len);
       var p2 = path.getPointAtLength(Math.min(totalLength, len + eps));
       var dx = p2.x - p.x, dy = p2.y - p.y;
       var dist = Math.sqrt(dx * dx + dy * dy) || 1;
-      var nx = -dy / dist, ny = dx / dist; // Einheits-Normalenvektor senkrecht zur Kurvenrichtung
-      ptsA.push({x: p.x + nx * halfWidth, y: p.y + ny * halfWidth});
-      ptsB.push({x: p.x - nx * halfWidth, y: p.y - ny * halfWidth});
+      samples.push({x: p.x, y: p.y, nx: -dy / dist, ny: dx / dist}); // Normalenvektor senkrecht zur Kurvenrichtung
+    }
+    edgeSamples = samples;
+  }
+
+  // Baut die Begrenzungslinien im Abstand halfWidth von der Mittellinie — pro Frame der Fold-Animation
+  // aufgerufen, deshalb bewusst nur noch Arithmetik über den gecachten Stützpunkten (computeEdgeSamples()).
+  function buildEdges(halfWidth){
+    if(!edgeA || !edgeB || !edgeSamples) return;
+    if(halfWidth === undefined) halfWidth = LANE_HALF;
+    var ptsA = [], ptsB = [];
+    for(var i = 0; i < edgeSamples.length; i++){
+      var s = edgeSamples[i];
+      ptsA.push({x: s.x + s.nx * halfWidth, y: s.y + s.ny * halfWidth});
+      ptsB.push({x: s.x - s.nx * halfWidth, y: s.y - s.ny * halfWidth});
     }
     edgeA.setAttribute('d', smoothPathD(ptsA));
     edgeB.setAttribute('d', smoothPathD(ptsB));
@@ -287,6 +303,8 @@ var GAME_ENABLED = true;
   var raf = null;
   var focusedEl = null;
   var hoveredTile = null; // gröber als focusedEl: die ganze .pillar/.ref/.player, ändert sich nur beim echten Verlassen der Kachel
+  var lastFocusCheck = null; // Bildschirmpunkt des letzten elementFromPoint()-Aufrufs
+  var FOCUS_CHECK_DIST = 4; // px — unterhalb dieser Bewegung wird der teure Hit-Test übersprungen (v.a. beim Stillstehen über einer Kachel)
   var particles = [];
   var lastInputType = null; // 'mouse' | 'keyboard' | 'touch' | 'jump'
   var lastMouseClient = {x:0, y:0};
@@ -315,6 +333,12 @@ var GAME_ENABLED = true;
   }
 
   function updateFocus(screenX, screenY){
+    if(lastFocusCheck){
+      var dx = screenX - lastFocusCheck.x, dy = screenY - lastFocusCheck.y;
+      if(dx * dx + dy * dy < FOCUS_CHECK_DIST * FOCUS_CHECK_DIST) return; // kaum Bewegung seit letztem Hit-Test -> überspringen
+    }
+    lastFocusCheck = {x: screenX, y: screenY};
+
     var hit = document.elementFromPoint(screenX, screenY);
 
     // Leertasten-Ziel: das genaueste a/button/[tabindex] unter dem Charakter
@@ -483,6 +507,7 @@ var GAME_ENABLED = true;
     if(icon) icon.classList.add('is-playing');
     resizeTrail();
     particles = [];
+    lastFocusCheck = null; // erzwingt frischen Hit-Test am neuen Startpunkt
 
     if(e && typeof e.clientX === 'number'){
       lastInputType = 'mouse';

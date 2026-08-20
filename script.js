@@ -4,9 +4,19 @@
   if(!spot) return;
   var reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
   if(reduce) return;
+  // Radial-Gradient-Repaint auf max. 1x pro Frame begrenzen, statt bei jedem einzelnen
+  // pointermove-Event (kann v.a. bei Touch-Drags öfter feuern als das Display Frames zeichnet).
+  var pendingX = 0, pendingY = 0, updateQueued = false;
+  function applyUpdate(){
+    spot.style.setProperty('--mx', pendingX + 'px');
+    spot.style.setProperty('--my', pendingY + 'px');
+    updateQueued = false;
+  }
   window.addEventListener('pointermove', function(e){
-    spot.style.setProperty('--mx', e.clientX + 'px');
-    spot.style.setProperty('--my', e.clientY + 'px');
+    pendingX = e.clientX; pendingY = e.clientY;
+    if(updateQueued) return;
+    updateQueued = true;
+    requestAnimationFrame(applyUpdate);
   });
 })();
 

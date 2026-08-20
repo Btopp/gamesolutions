@@ -38,6 +38,11 @@ body.game-active .track-edge{
   animation:track-flow 2s linear infinite;
 }
 @keyframes track-flow{to{stroke-dashoffset:-36}}
+/* Touch-Geräte: kein Dauer-Repaint durch die laufende Dash- und Drop-Shadow-Animation — Kante bleibt
+   sichtbar (Farbe/Breite unverändert), nur das ständige Neuzeichnen während des Spiels entfällt. */
+@media (pointer:coarse){
+  body.game-active .track-edge{animation:none;filter:none}
+}
 .start-pole{stroke:var(--line-2);stroke-width:2;transition:stroke .3s ease}
 .start-pennant{fill:var(--cyan);opacity:.5;transition:opacity .3s ease,fill .3s ease}
 body.game-active .start-pole{stroke:var(--cyan)}

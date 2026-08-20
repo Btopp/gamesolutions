@@ -64,6 +64,11 @@ header{
   backdrop-filter:blur(12px);
   border-bottom:1px solid var(--line);
 }
+/* Touch-Geräte (grober Zeiger, meist schwächere GPU) bekommen einen deckenderen Hintergrund statt
+   laufendem Blur-Resampling während des Scrollens — sonst klassische Scroll-Jank-Quelle auf Mobile. */
+@media (pointer:coarse){
+  header{background:rgba(20,15,30,.94);backdrop-filter:none}
+}
 .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
 .brand{
   font-family:"Unbounded",sans-serif;
