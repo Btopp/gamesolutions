@@ -4,7 +4,7 @@
   --card:#241A3D;
   --cloud:#F3ECFF;
   --muted:#A99FC6;
-  --pink:#FF3D8A;   /* Marcel · Konzept & Gestaltung */
+  --pink:#FF3D8A;   /* reserviert für Konzept & Gestaltung (aktuell ausgeblendet) */
   --cyan:#2DE2E6;   /* Niklas · Spiel & Technik */
   --gold:#FFD23F;   /* Vincent · Aufbau & Ablauf */
   --line:rgba(255,255,255,.10);
@@ -191,7 +191,7 @@ section.block{padding:144px 0;scroll-margin-top:80px}
 .pillar:nth-child(3){--c:var(--gold)}
 
 /* ---------- Team ---------- */
-.team{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;align-items:start}
 .player{
   background:rgba(36,26,61,.93);border:1px solid var(--line);border-radius:18px;
   padding:30px 28px;cursor:pointer;
