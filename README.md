@@ -1,4 +1,4 @@
-# gamesolutions
+# Software & Game Solutions
 
 ## Branch-Hinweis
 
