@@ -301,9 +301,19 @@ section.block{padding:144px 0;scroll-margin-top:80px}
 .ref-links{display:flex;flex-direction:column;gap:8px;margin-top:14px}
 .ref-links a{font-family:"Space Mono",monospace;font-size:14px;color:var(--rc);word-break:break-all}
 .ref-links a:hover,.ref-links a:focus-visible{text-decoration:underline}
-.ref:nth-child(1){--rc:var(--pink)}
-.ref:nth-child(2){--rc:var(--cyan)}
-.ref:nth-child(3){--rc:var(--gold)}
+.ref-panel p + p{margin-top:12px}
+.ref .ref-credit{font-family:"Space Mono",monospace;font-size:13px;letter-spacing:.04em;color:var(--cloud)}
+/* Farbe pro Karte per Klasse statt nth-child, damit neue Karten die Farben der übrigen nicht verschieben */
+.ref-pink{--rc:var(--pink)}
+.ref-cyan{--rc:var(--cyan)}
+.ref-gold{--rc:var(--gold)}
+/* Highlight-Karte: volle Breite über den anderen, Bild links / Text rechts */
+.ref-featured{grid-column:1/-1;flex-direction:row;overflow:clip} /* clip statt hidden, sonst greift sticky unten nicht */
+.ref-featured .ref-media{flex:0 0 52%;aspect-ratio:auto;min-height:clamp(260px,30vw,330px);border-bottom:0}
+.ref-featured .ref-body{flex:1;justify-content:center;padding:32px 36px;border-left:1px solid var(--line)}
+/* Aufgeklappt: Bild behält 16:9 statt mit dem Text in die Höhe zu wachsen und bleibt beim Lesen unter dem Header stehen */
+.ref-featured.open .ref-media{align-self:flex-start;aspect-ratio:16/9;min-height:0;position:sticky;top:96px}
+.ref-featured h3{font-size:1.45rem}
 
 /* ---------- Contact ---------- */
 .contact{
@@ -327,6 +337,10 @@ footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-s
 /* ---------- Responsive ---------- */
 @media (max-width:860px){
   .pillars,.team,.refs{grid-template-columns:1fr}
+  .ref-featured{flex-direction:column}
+  .ref-featured .ref-media,.ref-featured.open .ref-media{flex:none;align-self:stretch;aspect-ratio:16/9;min-height:0;position:relative;top:auto;border-bottom:1px solid var(--line)}
+  .ref-featured .ref-body{padding:24px 26px 28px;border-left:0}
+  .ref-featured h3{font-size:1.2rem}
   .hero-inner{padding:90px 0}
   .contact{padding:48px 26px}
 }
