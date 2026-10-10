@@ -27,6 +27,25 @@ body{padding-bottom:80px}
 }
 .biz-head .lead{font-size:1.05rem;color:var(--muted);max-width:480px;margin:0 auto}
 
+/* Mail-Adresse als Kopier-Button (Logik in business.js) */
+.biz-mail{
+  font:inherit;color:var(--cloud);cursor:pointer;
+  display:inline-flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px 12px;
+  max-width:100%;padding:9px 16px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line-2);
+  transition:border-color .15s ease,color .15s ease;
+}
+.biz-mail:hover,.biz-mail:focus-visible{border-color:var(--cyan)}
+.biz-mail:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+.biz-mail-addr{font-size:.95rem;overflow-wrap:anywhere}
+.biz-mail-hint{
+  font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);
+}
+.biz-mail.is-copied{border-color:var(--cyan)}
+.biz-mail.is-copied .biz-mail-hint{color:var(--cyan)}
+.biz-head .biz-mail{margin:0 0 20px}
+
 .biz-fair{
   margin:40px 0 0;padding:20px 22px;border-radius:14px;
   background:rgba(45,226,230,.07);border:1px solid rgba(45,226,230,.28);
@@ -34,10 +53,12 @@ body{padding-bottom:80px}
 .biz-fair:not(.biz-fair-active){display:none}
 .biz-fair-label{
   font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;
-  color:var(--cyan);display:inline-flex;align-items:center;gap:9px;margin-bottom:8px;
+  color:var(--cyan);display:inline-flex;align-items:flex-start;gap:9px;margin-bottom:8px;
 }
-.biz-fair-label::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--cyan)}
+.biz-fair-label::before{content:"";flex-shrink:0;width:8px;height:8px;margin-top:5px;border-radius:50%;background:var(--cyan)}
 .biz-fair p{font-size:.98rem;color:var(--cloud)}
+.biz-fair-link{display:inline-block;margin-top:10px;font-size:.95rem;color:var(--cyan)}
+.biz-fair-link:hover,.biz-fair-link:focus-visible{text-decoration:underline}
 
 .biz-pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:56px 0}
 .biz-pillar{
